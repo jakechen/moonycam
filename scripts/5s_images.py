@@ -1,11 +1,11 @@
 #
-# Takes a photo every 5 seconds
-# and pushes the photo to an S3 bucket
+# Takes a photo every 5 second
+# Keeps 10 minutes worth locally, then loops
 #
 
 # Vars
 wait = 5
-s3_bucket = 'jakechen'
+keep_minutes = 10
 
 # Libraries
 from time import sleep, gmtime, strftime
@@ -20,22 +20,17 @@ camera.start_preview()
 sleep(2)
 
 # Main loop
+keep_count = (keep_minutes*60)/wait
 
-time_lapsed = 0
-while True:
-    camera.capture('image.jpg')
+i = 0
+
+while i<keep_count:
+    camera.capture('./images/image_'+str(i)+'.jpg')
  
     cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     print('photo taken at {}'.format(cur_time))
-   
-    s3_key = 'projects/nvcam/image_'+str(time_lapsed)+'.jpg'
-    bucket = boto3.resource('s3').Bucket(s3_bucket)
-    bucket.upload_file('image.jpg', s3_key)
-
-    print('photo uploaded to {}'.format(s3_key))
 
     sleep(wait)
-    time_lapsed += wait
 
-    if time_lapsed == 60:
-        time_lapsed = 0
+    if i == keep_count:
+        i = 0
