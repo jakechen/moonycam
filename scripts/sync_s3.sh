@@ -1,0 +1,1 @@
+aws s3 sync ./images s3://$s3_bucket/$s3_prefix --dryrun
