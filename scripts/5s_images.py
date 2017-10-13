@@ -25,7 +25,8 @@ keep_count = (keep_minutes*60)/wait
 i = 0
 
 while i<keep_count:
-    camera.capture('./images/image_'+str(i)+'.jpg')
+    camera.capture('./images/latest/image_latest.jpg')
+    camera.capture('./images/loop/image_'+str(i)+'.jpg')
  
     cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     print('photo taken at {}'.format(cur_time))
