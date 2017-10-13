@@ -32,5 +32,7 @@ while i<keep_count:
 
     sleep(wait)
 
+    i+=1
+
     if i == keep_count:
         i = 0
