@@ -39,7 +39,14 @@ while i<keep_count:
     cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     print('photo taken at {}'.format(cur_time))
 
-    s3.upload_file('./images/latest/image_latest.jpg', s3_bucket, s3_prefix+'image_latest.jpg')
+    s3.upload_file(
+        './images/latest/image_latest.jpg',
+        s3_bucket, 
+        s3_prefix+'image_latest.jpg',
+        ExtraArgs = {
+          'StorageClass': 'STANDARD_IA'
+        }
+    )
 
     sleep(wait-2) # accoutn for transfer time
 
