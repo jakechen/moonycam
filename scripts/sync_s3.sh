@@ -1,1 +1,1 @@
-aws s3 sync ./images s3://$s3_bucket/$s3_prefix --dryrun
+aws s3 sync ./images s3://$s3_bucket/$s3_prefix --storage-class STANDARD_IA
