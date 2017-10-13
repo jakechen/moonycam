@@ -5,7 +5,7 @@
 
 # Vars
 wait = 5
-s3_bucket = 'jakechenaws'
+s3_bucket = 'jakechen'
 
 # Libraries
 from time import sleep, gmtime, strftime
@@ -14,7 +14,7 @@ import boto3
 
 # Initiate and warm-up camera
 camera = PiCamera()
-camera.resolution = (1024, 768)
+camera.resolution = (1440, 1080)
 camera.start_preview()
 # Camera warm-up time
 sleep(2)
