@@ -8,6 +8,10 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+<<<<<<< HEAD
+=======
+env/
+>>>>>>> 0721e2c623ed6f21ce989592e14ba41abe8a221a
 build/
 develop-eggs/
 dist/
@@ -23,7 +27,10 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+<<<<<<< HEAD
 MANIFEST
+=======
+>>>>>>> 0721e2c623ed6f21ce989592e14ba41abe8a221a
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -79,6 +86,7 @@ celerybeat-schedule
 # SageMath parsed files
 *.sage.py
 
+<<<<<<< HEAD
 # Environments
 .env
 .venv
@@ -87,6 +95,15 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+=======
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+>>>>>>> 0721e2c623ed6f21ce989592e14ba41abe8a221a
 
 # Spyder project settings
 .spyderproject
