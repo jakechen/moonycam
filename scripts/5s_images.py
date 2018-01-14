@@ -12,64 +12,52 @@ from picamera import PiCamera
 import boto3
 import os
 
-def loop_cam(
-    s3_bucket,
-    s3_prefix,
-    out_dir,
-    wait,
-    keep_minutes
-):
+def main(s3_bucket, s3_prefix, out_dir, wait, keep_minutes):
 
-# Initiate and warm-up camera
-camera = PiCamera()
-camera.resolution = (1440, 1080)
-camera.start_preview()
-# Camera warm-up time
-sleep(2)
+    keep_count = (keep_minutes*60)/wait
 
-# Main loop
-s3 = boto3.client('s3')
+    i = 0
 
-keep_count = (keep_minutes*60)/wait
+    while i<keep_count:
+        camera.capture('{}/image_latest.jpg'.format(out_dir))
+        camera.capture('{}/image_'.format(out_dir)+str(i)+'.jpg')
 
-i = 0
+        cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        print('photo taken at {}'.format(cur_time))
 
-while i<keep_count:
-    camera.capture('{}/image_latest.jpg'.format(out_dir))
-    camera.capture('{}/image_'.format(out_dir)+str(i)+'.jpg')
- 
-    cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    print('photo taken at {}'.format(cur_time))
+        s3.upload_file(
+            '{}/image_latest.jpg'.format(out_dir),
+            s3_bucket, 
+            s3_prefix+'image_latest.jpg',
+            ExtraArgs = {
+              'StorageClass': 'STANDARD_IA'
+            }
+        )
 
-    s3.upload_file(
-        '{}/image_latest.jpg'.format(out_dir),
-        s3_bucket, 
-        s3_prefix+'image_latest.jpg',
-        ExtraArgs = {
-          'StorageClass': 'STANDARD_IA'
-        }
-    )
+        sleep(wait-2) # accoutn for transfer time
 
-    sleep(wait-2) # accoutn for transfer time
+        i+=1
 
-    i+=1
+        if i == keep_count:
+            i = 0
 
-    if i == keep_count:
-        i = 0
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('s3_bucket', help='bucket to send photos to')
+    parser.add_argument('s3_prefix', help='key to save photos as')
+    parser.add_argument('out_dir', help='where to store photos locally')
+    parser.add_argument('-w', '--wait', help='interval between photos, default=5', type=int, default=5)
+    parser.add_argument('-keep', '--keep_minutes', help='how many minutes to keep, default=10', type=int, default=10)
+    args = parser.parse_args()
+    
+    # Initiate and warm-up camera
+    camera = PiCamera()
+    camera.resolution = (1440, 1080)
+    camera.start_preview()
+    # Camera warm-up time
+    sleep(2)
 
-if __name__ == __main__:
-parser = argparse.ArgumentParser()
-parser.add_argument('s3_bucket', help='bucket to send photos to')
-parser.add_argument('s3_prefix', help='key to save photos as')
-parser.add_argument('out_dir', help='where to store photos locally')
-parser.add_argument('-w', '--wait', help='interval between photos, default=5', type=int, default=5)
-parser.add_argument('-keep', '--keep_minutes', help='how many minutes to keep, default=10', type=int, default=10)
-args = parser.parse_args()
+    # Main loop
+    s3 = boto3.client('s3')
 
-
-s3_bucket = args.s3_bucket
-s3_prefix = args.s3_prefix
-out_dir = args.out_dir
-wait = args.wait
-keep_minutes = args.keep_minutes
-
+    main(args.s3_bucket, args.s3_prefix, args.out_dir, args.wait, args.keep_minutes)
