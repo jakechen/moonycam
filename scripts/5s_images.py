@@ -30,10 +30,7 @@ def main(s3_bucket, s3_prefix, wait, keep_minutes):
         s3.upload_file(
             './image_latest.jpg',
             s3_bucket, 
-            s3_prefix+'image_latest.jpg',
-            ExtraArgs = {
-              'StorageClass': 'STANDARD_IA'
-            }
+            s3_prefix+'image_latest.jpg'
         )
 
         sleep(wait-2) # accoutn for transfer time
