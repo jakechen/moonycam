@@ -11,6 +11,8 @@ from time import sleep, gmtime, strftime
 from picamera import PiCamera
 import boto3
 import os
+import logging
+logging.basicConfig(filename='out.log',level=logging.DEBUG)
 
 def main(s3_bucket, s3_prefix, out_dir, wait, keep_minutes):
 
@@ -23,7 +25,7 @@ def main(s3_bucket, s3_prefix, out_dir, wait, keep_minutes):
         camera.capture('{}/image_'.format(out_dir)+str(i)+'.jpg')
 
         cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        print('photo taken at {}'.format(cur_time))
+        logging.info('photo taken at {}'.format(cur_time))
 
         s3.upload_file(
             '{}/image_latest.jpg'.format(out_dir),
