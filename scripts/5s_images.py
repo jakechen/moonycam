@@ -12,7 +12,7 @@ from picamera import PiCamera
 import boto3
 import os
 import logging
-logging.basicConfig(filename='out.log',level=logging.DEBUG)
+logging.basicConfig(filename='out.log',level=logging.INFO)
 
 def main(s3_bucket, s3_prefix, wait, keep_minutes):
 
@@ -47,7 +47,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('s3_bucket', help='bucket to send photos to')
     parser.add_argument('s3_prefix', help='key to save photos as')
-    parser.add_argument('out_dir', help='where to store photos locally')
     parser.add_argument('-w', '--wait', help='interval between photos, default=5', type=int, default=5)
     parser.add_argument('-keep', '--keep_minutes', help='how many minutes to keep, default=10', type=int, default=10)
     args = parser.parse_args()
@@ -62,4 +61,4 @@ if __name__ == "__main__":
     # Main loop
     s3 = boto3.client('s3')
 
-    main(args.s3_bucket, args.s3_prefix, args.out_dir, args.wait, args.keep_minutes)
+    main(args.s3_bucket, args.s3_prefix, args.wait, args.keep_minutes)
