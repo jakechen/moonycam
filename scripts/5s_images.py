@@ -16,6 +16,8 @@ logging.basicConfig(filename='out.log',level=logging.INFO)
 
 def main(s3_bucket, s3_prefix, wait, keep_minutes):
 
+    s3 = boto3.client('s3')
+
     keep_count = (keep_minutes*60)/wait
 
     i = 0
@@ -56,6 +58,4 @@ if __name__ == "__main__":
     sleep(2)
 
     # Main loop
-    s3 = boto3.client('s3')
-
     main(args.s3_bucket, args.s3_prefix, args.wait, args.keep_minutes)
